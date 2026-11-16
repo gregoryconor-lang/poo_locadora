@@ -4,6 +4,8 @@
  */
 package views;
 
+import javax.swing.JInternalFrame;
+
 /**
  *
  * @author gregory
@@ -17,6 +19,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
      */
     public TelaPrincipal() {
         initComponents();
+    }
+    
+    public void abrirTela(JInternalFrame tela) {
+        tela.setVisible(true);
+        painelPrincipal.add(tela);
     }
 
     /**
@@ -35,6 +42,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         menuGerenciar = new javax.swing.JMenu();
         menuGerenciarCliente = new javax.swing.JMenuItem();
         menuGerenciarGenero = new javax.swing.JMenuItem();
+        menuGerenciarFilme = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Locadora em Classe");
@@ -53,6 +61,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         menuArquivo.setText("Arquivo");
 
         menuArquivoSair.setText("Sair");
+        menuArquivoSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuArquivoSairActionPerformed(evt);
+            }
+        });
         menuArquivo.add(menuArquivoSair);
 
         jMenuBar1.add(menuArquivo);
@@ -69,6 +82,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         menuGerenciarGenero.setText("Gênero");
         menuGerenciar.add(menuGerenciarGenero);
+
+        menuGerenciarFilme.setText("Filme");
+        menuGerenciarFilme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuGerenciarFilmeActionPerformed(evt);
+            }
+        });
+        menuGerenciar.add(menuGerenciarFilme);
 
         jMenuBar1.add(menuGerenciar);
 
@@ -90,10 +111,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void menuGerenciarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGerenciarClienteActionPerformed
         // TODO add your handling code here:
-        TelaCliente tela = new TelaCliente();
-        tela.setVisible(true);
-        painelPrincipal.add(tela);
+        abrirTela(new TelaCliente());
     }//GEN-LAST:event_menuGerenciarClienteActionPerformed
+
+    private void menuArquivoSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuArquivoSairActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_menuArquivoSairActionPerformed
+
+    private void menuGerenciarFilmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGerenciarFilmeActionPerformed
+        abrirTela(new TelaFilme());
+    }//GEN-LAST:event_menuGerenciarFilmeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -126,6 +153,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuArquivoSair;
     private javax.swing.JMenu menuGerenciar;
     private javax.swing.JMenuItem menuGerenciarCliente;
+    private javax.swing.JMenuItem menuGerenciarFilme;
     private javax.swing.JMenuItem menuGerenciarGenero;
     private javax.swing.JDesktopPane painelPrincipal;
     // End of variables declaration//GEN-END:variables
