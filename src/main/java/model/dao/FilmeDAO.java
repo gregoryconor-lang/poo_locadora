@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import model.bean.Filme;
+import model.bean.Genero;
 
 /**
  *
@@ -23,11 +24,12 @@ public class FilmeDAO {
         PreparedStatement stmt = null;
         
         try {
-            String query = "INSERT INTO filme(titulo, sinopse, duracao) VALUES(?,?,?)";
+            String query = "INSERT INTO filme(titulo, sinopse, duracao, id_genero) VALUES(?,?,?,?)";
             stmt = con.prepareStatement(query);
             stmt.setString(1, f.getTitulo());
             stmt.setString(2, f.getSinopse());
             stmt.setInt(3, f.getDuracao());
+            stmt.setInt(4, f.getGenero().getId()); // Associação com a classe Genero
             
             stmt.executeUpdate();
             
@@ -54,13 +56,18 @@ public class FilmeDAO {
             rs = stmt.executeQuery();
             
             while(rs.next()) {
-                Filme c = new Filme();
-                c.setId(rs.getInt("id_filme"));
-                c.setTitulo(rs.getString("titulo"));
-                c.setDuracao(rs.getInt("duracao"));
-                c.setSinopse(rs.getString("sinopse"));
+                Filme f = new Filme();
+                f.setId(rs.getInt("id_filme"));
+                f.setTitulo(rs.getString("titulo"));
+                f.setDuracao(rs.getInt("duracao"));
+                f.setSinopse(rs.getString("sinopse"));
                 
-                listaFilmes.add(c);
+                // Definir o atributo da associação (fk)
+                GeneroDAO daoGenero = new GeneroDAO();
+                Genero g = daoGenero.read(rs.getInt("id_genero"));
+                f.setGenero(g);                
+                
+                listaFilmes.add(f);
             }
         }
         catch(SQLException ex) {
@@ -86,13 +93,13 @@ public class FilmeDAO {
             rs = stmt.executeQuery();
             
             if(rs.next()) {
-                Filme c = new Filme();
-                c.setId(rs.getInt("id_filme"));
-                c.setTitulo(rs.getString("titulo"));
-                c.setDuracao(rs.getInt("duracao"));
-                c.setSinopse(rs.getString("sinopse"));
+                Filme f = new Filme();
+                f.setId(rs.getInt("id_filme"));
+                f.setTitulo(rs.getString("titulo"));
+                f.setDuracao(rs.getInt("duracao"));
+                f.setSinopse(rs.getString("sinopse"));
                 
-                return c;
+                return f;
             }
         }
         catch(SQLException ex) {
@@ -105,7 +112,7 @@ public class FilmeDAO {
         return null;
     }
     
-    public void update(Filme c) {
+    public void update(Filme f) {
         Connection con = Conexao.getConexao();
         PreparedStatement stmt = null;
         
@@ -114,10 +121,10 @@ public class FilmeDAO {
                     + "SET titulo = ?, sinopse = ?, duracao = ? "
                     + "WHERE id_filme = ?";
             stmt = con.prepareStatement(query);
-            stmt.setString(1, c.getTitulo());
-            stmt.setString(2, c.getSinopse());
-            stmt.setInt(3, c.getDuracao());
-            stmt.setInt(4, c.getId());
+            stmt.setString(1, f.getTitulo());
+            stmt.setString(2, f.getSinopse());
+            stmt.setInt(3, f.getDuracao());
+            stmt.setInt(4, f.getId());
             
             stmt.executeUpdate();
             
@@ -131,14 +138,14 @@ public class FilmeDAO {
         }
     }
     
-    public void destroy(Filme c) {
+    public void destroy(Filme f) {
         Connection con = Conexao.getConexao();
         PreparedStatement stmt = null;
         
         try {
             String query = "DELETE FROM filme WHERE id_filme = ?";
             stmt = con.prepareStatement(query);
-            stmt.setInt(1, c.getId());
+            stmt.setInt(1, f.getId());
             
             stmt.executeUpdate();
             

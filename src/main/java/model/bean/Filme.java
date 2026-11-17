@@ -13,6 +13,7 @@ public class Filme {
     private String titulo;
     private String sinopse;
     private int duracao;
+    private Genero genero; // Associação com a classe Genero
 
     public int getId() {
         return id;
@@ -45,4 +46,13 @@ public class Filme {
     public void setDuracao(int duracao) {
         this.duracao = duracao;
     }  
+    
+    // Get e set do atributo da associação
+    public Genero getGenero() {
+        return genero;
+    }
+
+    public void setGenero(Genero genero) {
+        this.genero = genero;
+    }    
 }
