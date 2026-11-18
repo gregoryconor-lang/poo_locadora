@@ -7,7 +7,9 @@ package views;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Filme;
+import model.bean.Genero;
 import model.dao.FilmeDAO;
+import model.dao.GeneroDAO;
 
 /**
  *
@@ -20,16 +22,18 @@ public class TelaFilme extends javax.swing.JInternalFrame {
      * Creates new form TelaFilme
      */
     public TelaFilme() {
-        initComponents();
+        initComponents();        
         
-        limpar();
         preencherTabela();
+        preencherComboGenero();
+        limpar();
     }
     
     public void limpar() {
         txtTitulo.setText("");
         txtDuracao.setText("");
         txtSinopse.setText("");
+        cmbGenero.setSelectedIndex(0);
         
         tblCadastrados.clearSelection();
         
@@ -48,8 +52,18 @@ public class TelaFilme extends javax.swing.JInternalFrame {
             dtm.addRow(new Object[] {
                 f.getId(),
                 f.getTitulo(),
-                f.getDuracao()
+                f.getDuracao(),
+                f.getGenero()
             });
+        }
+    }
+    
+    // Método para preencher o combobox de Gênero
+    public void preencherComboGenero() {
+        GeneroDAO dao = new GeneroDAO();
+        
+        for(Genero g : dao.read()) {
+            cmbGenero.addItem(g);
         }
     }
 
@@ -75,6 +89,7 @@ public class TelaFilme extends javax.swing.JInternalFrame {
         btnEditar = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
+        cmbGenero = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblCadastrados = new javax.swing.JTable();
 
@@ -141,10 +156,11 @@ public class TelaFilme extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtTitulo)
-                            .addComponent(txtDuracao)))
+                            .addComponent(txtDuracao)
+                            .addComponent(cmbGenero, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 198, Short.MAX_VALUE)
                         .addComponent(btnLimpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSalvar)
@@ -166,7 +182,9 @@ public class TelaFilme extends javax.swing.JInternalFrame {
                     .addComponent(jLabel2)
                     .addComponent(txtDuracao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel3)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(cmbGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -231,6 +249,8 @@ public class TelaFilme extends javax.swing.JInternalFrame {
         meuFilme.setTitulo(txtTitulo.getText());
         meuFilme.setDuracao(Integer.parseInt(txtDuracao.getText()));
         meuFilme.setSinopse(txtSinopse.getText());
+        // Para a associação com Gênero
+        meuFilme.setGenero((Genero) cmbGenero.getSelectedItem());
         
         FilmeDAO dao = new FilmeDAO();
         dao.create(meuFilme);
@@ -289,6 +309,7 @@ public class TelaFilme extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;
+    private javax.swing.JComboBox<Genero> cmbGenero;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
